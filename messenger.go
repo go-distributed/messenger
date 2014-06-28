@@ -59,6 +59,9 @@ func (m *Messenger) RegisterMessage(msg interface{}) error {
 	if _, ok := m.registeredMessages[msgType]; ok {
 		return fmt.Errorf("Message type %v already registered", msgType)
 	}
+	if err := m.codec.RegisterMessage(msg); err != nil {
+		return err
+	}
 	m.registeredMessages[msgType] = true
 	return nil
 }

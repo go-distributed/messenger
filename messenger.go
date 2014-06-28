@@ -38,7 +38,8 @@ type Messenger struct {
 // If enableRecv is set to true, then the user should be
 // responsible to consume the message via Recv(), otherwise
 // the the underlying reading will stop if the queue is full.
-func New(codec codec.Codec, tr transporter.Transporter, enableRecv, enableHandler bool) *Messenger {
+func New(codec codec.Codec, tr transporter.Transporter,
+	enableRecv, enableHandler bool) *Messenger {
 	return &Messenger{
 		codec:              codec,
 		tr:                 tr,

@@ -26,7 +26,7 @@ const defaultPrefix = "/messenger"
 const defaultChanSize = 1024
 
 // Create a new http transporter.
-func NewHttpTransporter(hostport string) (*HTTPTransporter, error) {
+func NewHTTPTransporter(hostport string) (*HTTPTransporter, error) {
 	t := &HTTPTransporter{
 		hostport:    hostport,
 		messageChan: make(chan *message, defaultChanSize),
@@ -41,6 +41,7 @@ func NewHttpTransporter(hostport string) (*HTTPTransporter, error) {
 // This will block.
 func (t *HTTPTransporter) Send(hostport string, b []byte) error {
 	targetURL := fmt.Sprintf("http://%s%s", hostport, defaultPrefix)
+	log.V(2).Infof("Sending message to %v\n", hostport)
 	resp, err := t.client.Post(targetURL, "application/messenger", bytes.NewReader(b))
 	if resp == nil || err != nil {
 		log.Warningf("HTTPTransporter: Failed to POST: %v\n", err)
@@ -71,7 +72,6 @@ func (t *HTTPTransporter) Stop() error {
 
 // Destroy the transporter.
 func (t *HTTPTransporter) Destroy() error {
-	close(t.messageChan)
 	return nil
 }
 
@@ -81,5 +81,6 @@ func (t *HTTPTransporter) messageHandler(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		log.Warningf("HTTPTransporter: Failed to read HTTP body: %v\n", err)
 	}
+	log.V(2).Infof("Receiving message from %v\n", r.RemoteAddr)
 	t.messageChan <- &message{b, err}
 }

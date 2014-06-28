@@ -29,35 +29,35 @@ func NewGoGoProtobufCodec() (*GoGoProtobufCodec, error) {
 }
 
 // Initial the gogoprotobuf codec (no-op for now).
-func (gc *GoGoProtobufCodec) Initial() error {
+func (c *GoGoProtobufCodec) Initial() error {
 	return nil
 }
 
 // Stop the gogoprotobuf codec (no-op for now).
-func (gc *GoGoProtobufCodec) Stop() error {
+func (c *GoGoProtobufCodec) Stop() error {
 	return nil
 }
 
 // Destroy the gogoprotobuf codec (no-op for now).
-func (gc *GoGoProtobufCodec) Destroy() error {
+func (c *GoGoProtobufCodec) Destroy() error {
 	return nil
 }
 
 // Register a message type.
-func (gc *GoGoProtobufCodec) RegisterMessage(msg interface{}) error {
+func (c *GoGoProtobufCodec) RegisterMessage(msg interface{}) error {
 	msgType := reflect.TypeOf(msg)
-	if _, ok := gc.registeredMessages[msgType]; ok {
+	if _, ok := c.registeredMessages[msgType]; ok {
 		return fmt.Errorf("Message type %v is already registered", msgType)
 	}
 	if _, ok := msg.(proto.Message); !ok {
 		return fmt.Errorf("Not a protobuf message %v", msgType)
 	}
-	gc.registeredMessages[msgType] = messageType(len(gc.registeredMessages))
+	c.registeredMessages[msgType] = messageType(len(c.registeredMessages))
 	return nil
 }
 
 // Marshal a message into a byte slice.
-func (gc *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
+func (c *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 	var err error
 	defer func() {
 		if err != nil {
@@ -65,7 +65,7 @@ func (gc *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 		}
 	}()
 
-	mtype, ok := gc.registeredMessages[reflect.TypeOf(msg)]
+	mtype, ok := c.registeredMessages[reflect.TypeOf(msg)]
 	if !ok {
 		return nil, fmt.Errorf("Unknown message type: %v", reflect.TypeOf(msg))
 	}
@@ -74,7 +74,7 @@ func (gc *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 		return nil, err
 	}
 
-	buf := new(bytes.Buffer)
+	var buf bytes.Buffer
 	if err = binary.Write(buf, binary.LittleEndian, mtype); err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (gc *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 }
 
 // Unmarshal a message from a byte slice.
-func (gc *GoGoProtobufCodec) Unmarshal(data []byte) (interface{}, error) {
+func (c *GoGoProtobufCodec) Unmarshal(data []byte) (interface{}, error) {
 	var err error
 	defer func() {
 		if err != nil {
@@ -101,7 +101,7 @@ func (gc *GoGoProtobufCodec) Unmarshal(data []byte) (interface{}, error) {
 		return nil, err
 	}
 
-	msg := reflect.New(gc.reversedMap[mtype]).Interface().(proto.Message)
+	msg := reflect.New(c.reversedMap[mtype]).Interface().(proto.Message)
 	if err = proto.Unmarshal(buf.Bytes(), msg); err != nil {
 		return nil, err
 	}

@@ -12,7 +12,7 @@ type Transporter interface {
 	// Return the bytes form of the message.
 	Recv() (b []byte, err error)
 
-	// Start the transporter. Returns an error if it fails.
+	// Start the transporter, this will block unless some error happens.
 	Start() error
 
 	// Stop the transporter.

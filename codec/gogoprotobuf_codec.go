@@ -15,26 +15,23 @@ type messageType uint8
 
 // The gogoprotobuf codec.
 type GoGoProtobufCodec struct {
-	registeredMessages map[reflect.Type]messageType
-	reversedMap        map[messageType]reflect.Type
+	registeredMessages    map[reflect.Type]messageType
+	reversedMap           map[messageType]reflect.Type
+	registeredMessagePtrs map[reflect.Type]messageType
 }
 
 // Create a new gogpprotobuf codec.
 func NewGoGoProtobufCodec() (*GoGoProtobufCodec, error) {
 	g := &GoGoProtobufCodec{
-		registeredMessages: make(map[reflect.Type]messageType),
-		reversedMap:        make(map[messageType]reflect.Type),
+		registeredMessages:    make(map[reflect.Type]messageType),
+		reversedMap:           make(map[messageType]reflect.Type),
+		registeredMessagePtrs: make(map[reflect.Type]messageType),
 	}
 	return g, nil
 }
 
 // Initial the gogoprotobuf codec (no-op for now).
 func (c *GoGoProtobufCodec) Initial() error {
-	return nil
-}
-
-// Stop the gogoprotobuf codec (no-op for now).
-func (c *GoGoProtobufCodec) Stop() error {
 	return nil
 }
 
@@ -45,18 +42,33 @@ func (c *GoGoProtobufCodec) Destroy() error {
 
 // Register a message type.
 func (c *GoGoProtobufCodec) RegisterMessage(msg interface{}) error {
-	msgType := reflect.TypeOf(msg)
-	if _, ok := c.registeredMessages[msgType]; ok {
-		return fmt.Errorf("Message type %v is already registered", msgType)
+	msgTypeValue := reflect.ValueOf(msg)
+
+	var concreteType reflect.Type
+	var ptrType reflect.Type
+	if msgTypeValue.Kind() == reflect.Ptr {
+		concreteType = reflect.Indirect(msgTypeValue).Type()
+		ptrType = msgTypeValue.Type()
+	} else {
+		concreteType = msgTypeValue.Type()
+		ptrType = reflect.PtrTo(concreteType)
+	}
+	if _, ok := c.registeredMessages[concreteType]; ok {
+		return fmt.Errorf("Message type %v is already registered", concreteType)
 	}
 	if _, ok := msg.(proto.Message); !ok {
-		return fmt.Errorf("Not a protobuf message %v", msgType)
+		return fmt.Errorf("Not a protobuf message %v", concreteType)
 	}
-	c.registeredMessages[msgType] = messageType(len(c.registeredMessages))
+	// Store the message type.
+	mtype := messageType(len(c.registeredMessages))
+	c.registeredMessages[concreteType] = mtype
+	c.reversedMap[mtype] = concreteType
+	c.registeredMessagePtrs[ptrType] = mtype
 	return nil
 }
 
 // Marshal a message into a byte slice.
+// The msg must be a pointer type.
 func (c *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 	var err error
 	defer func() {
@@ -65,20 +77,24 @@ func (c *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 		}
 	}()
 
-	mtype, ok := c.registeredMessages[reflect.TypeOf(msg)]
+	// Check if the message is registered.
+	mtype, ok := c.registeredMessagePtrs[reflect.TypeOf(msg)]
 	if !ok {
-		return nil, fmt.Errorf("Unknown message type: %v", reflect.TypeOf(msg))
+		return nil, fmt.Errorf("Unknown message type: %v", reflect.ValueOf(msg).Elem().Type())
 	}
+
 	b, err := proto.Marshal(msg.(proto.Message))
 	if err != nil {
 		return nil, err
 	}
 
-	var buf bytes.Buffer
+	// Write the type at the beginning.
+	buf := new(bytes.Buffer)
 	if err = binary.Write(buf, binary.LittleEndian, mtype); err != nil {
 		return nil, err
 	}
 
+	// Write the data.
 	n, err := buf.Write(b)
 	if err != nil || n != len(b) {
 		return nil, err

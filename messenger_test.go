@@ -45,10 +45,10 @@ func (e *echoServer) msgHandler(msg interface{}) {
 	e.m.Send(e.peerAddr, msg)
 }
 
-func generateMessages() []proto.Message {
+func generateMessages(n int) []proto.Message {
 	m := make([]proto.Message, 0)
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < n; i++ {
 		m1 := &example.GoGoProtobufTestMessage1{
 			F0: proto.Int32(int32(rand.Int())),
 			F1: proto.String(fmt.Sprintf("%10d", rand.Int())),
@@ -133,7 +133,8 @@ func TestSendRecv(t *testing.T) {
 	assert.NoError(t, m.Start())
 	assert.NoError(t, n.Start())
 
-	messages := generateMessages()
+	cnt := 10
+	messages := generateMessages(cnt)
 
 	go func() {
 		for i := range messages {
@@ -158,7 +159,17 @@ func TestSendRecv(t *testing.T) {
 		}
 	}()
 	<-time.After(time.Second * 5)
-	//assert.Equal(t, messages, recvMessages)
+
+	for i := range messages {
+		assert.Equal(t, messages[i], recvMessages[i])
+
+	}
+
+	// Verify that the handlers are called.
+	assert.Equal(t, cnt, count1)
+	assert.Equal(t, cnt, count2)
+	assert.Equal(t, cnt, count3)
+	assert.Equal(t, cnt, count4)
 
 	assert.NoError(t, m.Stop())
 	assert.NoError(t, n.Stop())

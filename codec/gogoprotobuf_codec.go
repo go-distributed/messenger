@@ -21,13 +21,12 @@ type GoGoProtobufCodec struct {
 }
 
 // Create a new gogpprotobuf codec.
-func NewGoGoProtobufCodec() (*GoGoProtobufCodec, error) {
-	g := &GoGoProtobufCodec{
+func NewGoGoProtobufCodec() *GoGoProtobufCodec {
+	return &GoGoProtobufCodec{
 		registeredMessages:    make(map[reflect.Type]messageType),
 		reversedMap:           make(map[messageType]reflect.Type),
 		registeredMessagePtrs: make(map[reflect.Type]messageType),
 	}
-	return g, nil
 }
 
 // Initial the gogoprotobuf codec (no-op for now).
@@ -42,10 +41,11 @@ func (c *GoGoProtobufCodec) Destroy() error {
 
 // Register a message type.
 func (c *GoGoProtobufCodec) RegisterMessage(msg interface{}) error {
-	msgTypeValue := reflect.ValueOf(msg)
-
 	var concreteType reflect.Type
 	var ptrType reflect.Type
+
+	msgTypeValue := reflect.ValueOf(msg)
+
 	if msgTypeValue.Kind() == reflect.Ptr {
 		concreteType = reflect.Indirect(msgTypeValue).Type()
 		ptrType = msgTypeValue.Type()
@@ -71,6 +71,7 @@ func (c *GoGoProtobufCodec) RegisterMessage(msg interface{}) error {
 // The msg must be a pointer type.
 func (c *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 	var err error
+
 	defer func() {
 		if err != nil {
 			log.Warningf("GoGoProtobufCodec: Failed to marshal: %v\n", err)
@@ -105,6 +106,8 @@ func (c *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 // Unmarshal a message from a byte slice.
 func (c *GoGoProtobufCodec) Unmarshal(data []byte) (interface{}, error) {
 	var err error
+	var mtype messageType
+
 	defer func() {
 		if err != nil {
 			log.Warningf("GoGoProtobufCodec: Failed to unmarshal: %v\n", err)
@@ -112,7 +115,6 @@ func (c *GoGoProtobufCodec) Unmarshal(data []byte) (interface{}, error) {
 	}()
 
 	buf := bytes.NewBuffer(data)
-	var mtype messageType
 	if err = binary.Read(buf, binary.LittleEndian, &mtype); err != nil {
 		return nil, err
 	}

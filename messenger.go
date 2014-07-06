@@ -3,6 +3,7 @@ package messenger
 import (
 	"fmt"
 	"reflect"
+	"time"
 
 	log "github.com/go-distributed/messenger/3rdparty/github.com/golang/glog"
 	"github.com/go-distributed/messenger/codec"
@@ -10,6 +11,7 @@ import (
 )
 
 const defaultQueueSize = 1024
+const preparePeriod = time.Second * 1
 
 type MessageHandler func(interface{})
 
@@ -38,15 +40,23 @@ type Messenger struct {
 // If enableRecv is set to true, then the user should be
 // responsible to consume the message via Recv(), otherwise
 // the the underlying reading will stop if the queue is full.
+// At least one of the enableRecv and enableHandler should be
+// set to true.
 func New(codec codec.Codec, tr transporter.Transporter,
 	enableRecv, enableHandler bool) *Messenger {
+	if !enableRecv && !enableHandler {
+		log.Warningf("Neither recv or handler is enabled\n")
+		return nil
+	}
 	return &Messenger{
 		codec:              codec,
 		tr:                 tr,
 		inQueue:            make(chan interface{}, defaultQueueSize),
 		outQueue:           make(chan *messageToSend, defaultQueueSize),
+		recvQueue:          make(chan interface{}, defaultQueueSize),
 		handlers:           make(map[reflect.Type]MessageHandler),
 		registeredMessages: make(map[reflect.Type]bool),
+		stop:               make(chan struct{}),
 		enableRecv:         enableRecv,
 		enableHandler:      enableHandler,
 	}
@@ -87,9 +97,20 @@ func (m *Messenger) Start() error {
 	if err := m.codec.Initial(); err != nil {
 		return err
 	}
-	if err := m.Start(); err != nil {
+
+	errChan := make(chan error)
+	go func() {
+		if err := m.tr.Start(); err != nil {
+			errChan <- err
+		}
+	}()
+
+	select {
+	case err := <-errChan:
 		return err
+	case <-time.After(preparePeriod):
 	}
+
 	go m.incomingLoop()
 	go m.outgoingLoop()
 	go m.readingLoop()
@@ -105,7 +126,6 @@ func (m *Messenger) incomingLoop() {
 		default:
 		}
 
-		//
 		b, err := m.tr.Recv()
 		if err != nil {
 			log.Warningf("Transporter Recv() error: %v\n", err)

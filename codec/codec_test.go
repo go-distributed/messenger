@@ -39,8 +39,8 @@ func generateGoGoProtobufMessages() []proto.Message {
 }
 
 func TestGoGoProtobufCodec(t *testing.T) {
-	c, err := NewGoGoProtobufCodec()
-	assert.NoError(t, err)
+	c := NewGoGoProtobufCodec()
+	assert.NotNil(t, c)
 	assert.NoError(t, c.Initial())
 
 	// Register messages.
@@ -59,7 +59,7 @@ func TestGoGoProtobufCodec(t *testing.T) {
 	}
 
 	// Try to marshal an unregistered message, should fail.
-	_, err = c.Marshal(&example.GoGoProtobufTestMessage5{})
+	_, err := c.Marshal(&example.GoGoProtobufTestMessage5{})
 	assert.Error(t, err)
 
 	assert.NoError(t, c.Destroy())
@@ -67,7 +67,7 @@ func TestGoGoProtobufCodec(t *testing.T) {
 
 // Benchmark the Unmarshal() of the raw gogoprotobuf marshal,
 // in order to be compared with the codec.
-func BenchmarkGoGoProtobufWithNoReflectMarshal(b *testing.B) {
+func BenchmarkGoGoProtobufWithoutReflectMarshal(b *testing.B) {
 	var err error
 
 	messages := generateGoGoProtobufMessages()
@@ -85,7 +85,7 @@ func BenchmarkGoGoProtobufWithNoReflectMarshal(b *testing.B) {
 
 // Benchmark the Unmarshal() of the raw gogoprotobuf,
 // in order to be compared with the codec.
-func BenchmarkGoGoProtobufWithNoReflectUnmarshal(b *testing.B) {
+func BenchmarkGoGoProtobufWithoutReflectUnmarshal(b *testing.B) {
 	var err error
 
 	messages := generateGoGoProtobufMessages()
@@ -115,11 +115,13 @@ func BenchmarkGoGoProtobufWithNoReflectUnmarshal(b *testing.B) {
 
 // Benchmark the Marshal() of the gogoprotobuf codec.
 func BenchmarkGoGoProtoBufCodecMarshal(b *testing.B) {
+	var err error
+
 	messages := generateGoGoProtobufMessages()
 	data := make([][]byte, len(messages))
 
-	c, err := NewGoGoProtobufCodec()
-	assert.NoError(b, err)
+	c := NewGoGoProtobufCodec()
+	assert.NotNil(b, c)
 	assert.NoError(b, c.Initial())
 
 	// Register messages.
@@ -145,11 +147,13 @@ func BenchmarkGoGoProtoBufCodecMarshal(b *testing.B) {
 
 // Benchmark the Unmarshal() of the gogoprotobuf codec.
 func BenchmarkGoGoProtoBufCodecUnmarshal(b *testing.B) {
+	var err error
+
 	messages := generateGoGoProtobufMessages()
 	data := make([][]byte, len(messages))
 
-	c, err := NewGoGoProtobufCodec()
-	assert.NoError(b, err)
+	c := NewGoGoProtobufCodec()
+	assert.NotNil(b, c)
 	assert.NoError(b, c.Initial())
 
 	// Register messages.

@@ -26,7 +26,7 @@ const defaultPrefix = "/messenger"
 const defaultChanSize = 1024
 
 // Create a new http transporter.
-func NewHTTPTransporter(hostport string) (*HTTPTransporter, error) {
+func NewHTTPTransporter(hostport string) *HTTPTransporter {
 	t := &HTTPTransporter{
 		hostport:    hostport,
 		messageChan: make(chan *message, defaultChanSize),
@@ -34,7 +34,7 @@ func NewHTTPTransporter(hostport string) (*HTTPTransporter, error) {
 		client:      new(http.Client),
 	}
 	t.mux.HandleFunc(defaultPrefix, t.messageHandler)
-	return t, nil
+	return t
 }
 
 // Send an encoded message to the host:port.

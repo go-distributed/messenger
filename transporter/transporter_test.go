@@ -88,11 +88,11 @@ func benchmarkTransporter(b *testing.B, s, r Transporter, target string) {
 
 // Test the HTTPTransporter.
 func TestHTTPTransporter(t *testing.T) {
-	sender, err := NewHTTPTransporter("localhost:8080")
-	assert.NoError(t, err)
+	sender := NewHTTPTransporter("localhost:8080")
+	assert.NotNil(t, sender)
 
-	receiver, err := NewHTTPTransporter("localhost:8081")
-	assert.NoError(t, err)
+	receiver := NewHTTPTransporter("localhost:8081")
+	assert.NotNil(t, receiver)
 
 	go func() {
 		assert.NoError(t, sender.Start())
@@ -112,11 +112,11 @@ func BenchmarkHTTPTransporter(b *testing.B) {
 	port := rand.Intn(100) + 8000
 	s := fmt.Sprintf("localhost:%d", port)
 	r := fmt.Sprintf("localhost:%d", port+1)
-	sender, err := NewHTTPTransporter(s)
-	assert.NoError(b, err)
+	sender := NewHTTPTransporter(s)
+	assert.NotNil(b, sender)
 
-	receiver, err := NewHTTPTransporter(r)
-	assert.NoError(b, err)
+	receiver := NewHTTPTransporter(r)
+	assert.NotNil(b, receiver)
 
 	go func() {
 		assert.NoError(b, sender.Start())

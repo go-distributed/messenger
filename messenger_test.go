@@ -46,7 +46,7 @@ func (e *echoServer) msgHandler(msg interface{}) {
 }
 
 func generateMessages(n int) []proto.Message {
-	m := make([]proto.Message, 0)
+	var m []proto.Message
 
 	for i := 0; i < n; i++ {
 		m1 := &example.GoGoProtobufTestMessage1{
@@ -142,7 +142,7 @@ func TestSendRecv(t *testing.T) {
 		}
 	}()
 
-	recvMessages := make([]interface{}, 0)
+	var recvMessages []interface{}
 
 	wait := make(chan struct{})
 	go func() {

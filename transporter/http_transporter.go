@@ -15,6 +15,7 @@ type message struct {
 	err  error
 }
 
+// HTTPTransporter implements the Transporter atop http.
 type HTTPTransporter struct {
 	hostport    string // Local address.
 	messageChan chan *message
@@ -25,7 +26,7 @@ type HTTPTransporter struct {
 const defaultPrefix = "/messenger"
 const defaultChanSize = 1024
 
-// Create a new http transporter.
+// NewHTTPTransporter creates a new http transporter.
 func NewHTTPTransporter(hostport string) *HTTPTransporter {
 	t := &HTTPTransporter{
 		hostport:    hostport,
@@ -51,7 +52,7 @@ func (t *HTTPTransporter) Send(hostport string, b []byte) error {
 	return nil
 }
 
-// Receive a message in bytes from some peer.
+// Recv receives a message in bytes from some peer.
 func (t *HTTPTransporter) Recv() (b []byte, err error) {
 	msg := <-t.messageChan
 	return msg.data, msg.err

@@ -13,6 +13,9 @@ import (
 const defaultQueueSize = 1024
 const preparePeriod = time.Second * 1
 
+// MessageHandler is a callback that handles the messages.
+// One can register the message with the callback by
+// calling RegisterHandler.
 type MessageHandler func(interface{})
 
 type messageToSend struct {
@@ -20,8 +23,8 @@ type messageToSend struct {
 	msg      interface{}
 }
 
-// A messenger can send to a specified peer
-// or receive messages from peers.
+// Messenger is an abstraction that can send and receive
+// messages. 
 type Messenger struct {
 	codec     codec.Codec
 	tr        transporter.Transporter
@@ -36,7 +39,7 @@ type Messenger struct {
 	enableHandler      bool
 }
 
-// Create a new messenger.
+// New create a new messenger.
 // If enableRecv is set to true, then the user should be
 // responsible to consume the message via Recv(), otherwise
 // the the underlying reading will stop if the queue is full.
@@ -62,7 +65,7 @@ func New(codec codec.Codec, tr transporter.Transporter,
 	}
 }
 
-// Register a message in the messenger.
+// RegisterMessage Regists a message in the messenger.
 // It will call the undelying codec to register the message as well.
 func (m *Messenger) RegisterMessage(msg interface{}) error {
 	msgType := reflect.TypeOf(msg)
@@ -76,7 +79,7 @@ func (m *Messenger) RegisterMessage(msg interface{}) error {
 	return nil
 }
 
-// Register a message with a handler.
+// RegisterHandler regists a message with a handler.
 // When such a message comes in, it will be passed to
 // the handler.
 func (m *Messenger) RegisterHandler(msg interface{}, msgHandler MessageHandler) error {

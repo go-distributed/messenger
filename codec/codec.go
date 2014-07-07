@@ -1,6 +1,6 @@
 package codec
 
-// A codec interface that defines what a codec should implement.
+// Codec defines the interface that a codec should implement.
 // A codec should be able to marshal/unmarshal messages from the
 // given bytes.
 type Codec interface {

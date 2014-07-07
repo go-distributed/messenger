@@ -13,14 +13,15 @@ import (
 // Only support 256 different kinds of messages for now.
 type messageType uint8
 
-// The gogoprotobuf codec.
+// GoGoProtobufCodec implements the codec interface for Codec.
+// We use reflect to make it a 'self-explained' codec.
 type GoGoProtobufCodec struct {
 	registeredMessages    map[reflect.Type]messageType
 	reversedMap           map[messageType]reflect.Type
 	registeredMessagePtrs map[reflect.Type]messageType
 }
 
-// Create a new gogpprotobuf codec.
+// NewGoGoProtobufCodec creates a new gogpprotobuf codec.
 func NewGoGoProtobufCodec() *GoGoProtobufCodec {
 	return &GoGoProtobufCodec{
 		registeredMessages:    make(map[reflect.Type]messageType),
@@ -39,7 +40,7 @@ func (c *GoGoProtobufCodec) Destroy() error {
 	return nil
 }
 
-// Register a message type.
+// RegisterMessage regists a message type.
 func (c *GoGoProtobufCodec) RegisterMessage(msg interface{}) error {
 	var concreteType reflect.Type
 	var ptrType reflect.Type

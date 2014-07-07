@@ -1,6 +1,6 @@
 package transporter
 
-// A transporter provides only simple primitives, including
+// Transporter defines interfaces of a transporter, including
 // Send and Recv.
 type Transporter interface {
 	// Send an encoded message to the host:port.

@@ -17,15 +17,15 @@
 */
 package protobuf
 
-import proto "github.com/yifan-gu/go-mesos/3rdparty/code.google.com/p/gogoprotobuf/proto"
+import proto "github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
 import json "encoding/json"
 import math "math"
 
-// discarding unused import gogoproto "github.com/yifan-gu/go-mesos/3rdparty/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
+// discarding unused import gogoproto "github.com/go-distributed/messenger/3rdparty/github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
 
 import io "io"
 import math1 "math"
-import code_google_com_p_gogoprotobuf_proto "github.com/yifan-gu/go-mesos/3rdparty/code.google.com/p/gogoprotobuf/proto"
+import code_google_com_p_gogoprotobuf_proto "github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
 
 import fmt "fmt"
 import strings "strings"
@@ -35,7 +35,7 @@ import math2 "math"
 
 import fmt1 "fmt"
 import strings1 "strings"
-import code_google_com_p_gogoprotobuf_proto1 "github.com/yifan-gu/go-mesos/3rdparty/code.google.com/p/gogoprotobuf/proto"
+import code_google_com_p_gogoprotobuf_proto1 "github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
 import sort "sort"
 import strconv "strconv"
 import reflect1 "reflect"

@@ -1,6 +1,6 @@
 package protobuf;
 
-import "code.google.com/p/gogoprotobuf/gogoproto/gogo.proto";
+import "github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/gogoproto/gogo.proto";
 
 option (gogoproto.gostring_all) = true;
 option (gogoproto.equal_all) = true;

@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
-	"github.com/go-distributed/messenger/3rdparty/github.com/testify/assert"
+	"code.google.com/p/gogoprotobuf/proto"
 	"github.com/go-distributed/messenger/codec"
 	example "github.com/go-distributed/messenger/codec/testexample"
 	"github.com/go-distributed/messenger/transporter"
+	"github.com/go-distributed/testify/assert"
 )
 
 var count1 int

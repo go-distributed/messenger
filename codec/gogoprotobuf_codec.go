@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
-	log "github.com/go-distributed/messenger/3rdparty/github.com/golang/glog"
+	"code.google.com/p/gogoprotobuf/proto"
+	log "github.com/golang/glog"
 )
 
 // Only support 256 different kinds of messages for now.

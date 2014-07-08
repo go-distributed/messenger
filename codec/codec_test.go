@@ -3,8 +3,8 @@ package codec
 import (
 	"testing"
 
-	"github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
-	"github.com/go-distributed/messenger/3rdparty/github.com/testify/assert"
+	"code.google.com/p/gogoprotobuf/proto"
+	"github.com/go-distributed/testify/assert"
 	example "github.com/go-distributed/messenger/codec/testexample"
 )
 

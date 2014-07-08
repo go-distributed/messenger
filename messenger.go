@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"time"
 
-	log "github.com/go-distributed/messenger/3rdparty/github.com/golang/glog"
 	"github.com/go-distributed/messenger/codec"
 	"github.com/go-distributed/messenger/transporter"
+	log "github.com/golang/glog"
 )
 
 const defaultQueueSize = 1024
@@ -24,7 +24,7 @@ type messageToSend struct {
 }
 
 // Messenger is an abstraction that can send and receive
-// messages. 
+// messages.
 type Messenger struct {
 	codec     codec.Codec
 	tr        transporter.Transporter

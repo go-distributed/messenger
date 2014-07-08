@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	log "github.com/go-distributed/messenger/3rdparty/github.com/golang/glog"
+	log "github.com/golang/glog"
 )
 
 // For internal message passing.

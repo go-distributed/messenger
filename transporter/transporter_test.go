@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-distributed/messenger/3rdparty/github.com/testify/assert"
+	"github.com/go-distributed/testify/assert"
 )
 
 // Help to generage random bytes.

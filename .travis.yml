@@ -6,11 +6,8 @@ go:
 install:
   - sudo apt-get install protobuf-compiler
   - go get code.google.com/p/go.tools/cmd/cover
-  - go get code.google.com/p/gogoprotobuf/{proto,protoc-gen-gogo,gogoproto}
+  - go get github.com/tools/godep
+  - export PATH=$HOME/gopath/bin/:$PATH
 
 script:
-  - go test -v -cover
-  - cd codec
-  - go test -v -cover
-  - cd ../transporter
-  - go test -v -cover
+  - godep go test -v -cover ./...

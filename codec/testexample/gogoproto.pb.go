@@ -17,15 +17,15 @@
 */
 package protobuf
 
-import proto "github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
+import proto "code.google.com/p/gogoprotobuf/proto"
 import json "encoding/json"
 import math "math"
 
-// discarding unused import gogoproto "github.com/go-distributed/messenger/3rdparty/github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
+// discarding unused import gogoproto "code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
 
 import io "io"
 import math1 "math"
-import code_google_com_p_gogoprotobuf_proto "github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
+import code_google_com_p_gogoprotobuf_proto "code.google.com/p/gogoprotobuf/proto"
 
 import fmt "fmt"
 import strings "strings"
@@ -35,7 +35,7 @@ import math2 "math"
 
 import fmt1 "fmt"
 import strings1 "strings"
-import code_google_com_p_gogoprotobuf_proto1 "github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/proto"
+import code_google_com_p_gogoprotobuf_proto1 "code.google.com/p/gogoprotobuf/proto"
 import sort "sort"
 import strconv "strconv"
 import reflect1 "reflect"
@@ -729,7 +729,7 @@ func (m *GoGoProtobufTestMessage1) Size() (n int) {
 	var l int
 	_ = l
 	if m.F0 != nil {
-		n += 1 + sovGogoproto(uint64(*m.F0))
+		n += 1 + sovGogoproto(uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		l = len(*m.F1)
@@ -747,7 +747,7 @@ func (m *GoGoProtobufTestMessage2) Size() (n int) {
 	var l int
 	_ = l
 	if m.F0 != nil {
-		n += 1 + sovGogoproto(uint64(*m.F0))
+		n += 1 + sovGogoproto(uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		l = len(*m.F1)
@@ -765,7 +765,7 @@ func (m *GoGoProtobufTestMessage3) Size() (n int) {
 	var l int
 	_ = l
 	if m.F0 != nil {
-		n += 1 + sovGogoproto(uint64(*m.F0))
+		n += 1 + sovGogoproto(uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		l = len(*m.F1)
@@ -784,7 +784,7 @@ func (m *GoGoProtobufTestMessage4) Size() (n int) {
 	var l int
 	_ = l
 	if m.F0 != nil {
-		n += 1 + sovGogoproto(uint64(*m.F0))
+		n += 1 + sovGogoproto(uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		l = len(*m.F1)
@@ -799,7 +799,7 @@ func (m *GoGoProtobufTestMessage5) Size() (n int) {
 	var l int
 	_ = l
 	if m.F0 != nil {
-		n += 1 + sovGogoproto(uint64(*m.F0))
+		n += 1 + sovGogoproto(uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		l = len(*m.F1)
@@ -827,10 +827,16 @@ func sozGogoproto(x uint64) (n int) {
 func NewPopulatedGoGoProtobufTestMessage1(r randyGogoproto, easy bool) *GoGoProtobufTestMessage1 {
 	this := &GoGoProtobufTestMessage1{}
 	v1 := r.Int31()
+	if r.Intn(2) == 0 {
+		v1 *= -1
+	}
 	this.F0 = &v1
 	v2 := randStringGogoproto(r)
 	this.F1 = &v2
 	v3 := r.Float32()
+	if r.Intn(2) == 0 {
+		v3 *= -1
+	}
 	this.F2 = &v3
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedGogoproto(r, 4)
@@ -841,10 +847,16 @@ func NewPopulatedGoGoProtobufTestMessage1(r randyGogoproto, easy bool) *GoGoProt
 func NewPopulatedGoGoProtobufTestMessage2(r randyGogoproto, easy bool) *GoGoProtobufTestMessage2 {
 	this := &GoGoProtobufTestMessage2{}
 	v4 := r.Int31()
+	if r.Intn(2) == 0 {
+		v4 *= -1
+	}
 	this.F0 = &v4
 	v5 := randStringGogoproto(r)
 	this.F1 = &v5
 	v6 := r.Float32()
+	if r.Intn(2) == 0 {
+		v6 *= -1
+	}
 	this.F2 = &v6
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedGogoproto(r, 4)
@@ -855,6 +867,9 @@ func NewPopulatedGoGoProtobufTestMessage2(r randyGogoproto, easy bool) *GoGoProt
 func NewPopulatedGoGoProtobufTestMessage3(r randyGogoproto, easy bool) *GoGoProtobufTestMessage3 {
 	this := &GoGoProtobufTestMessage3{}
 	v7 := r.Int31()
+	if r.Intn(2) == 0 {
+		v7 *= -1
+	}
 	this.F0 = &v7
 	v8 := randStringGogoproto(r)
 	this.F1 = &v8
@@ -869,6 +884,9 @@ func NewPopulatedGoGoProtobufTestMessage3(r randyGogoproto, easy bool) *GoGoProt
 func NewPopulatedGoGoProtobufTestMessage4(r randyGogoproto, easy bool) *GoGoProtobufTestMessage4 {
 	this := &GoGoProtobufTestMessage4{}
 	v10 := r.Int31()
+	if r.Intn(2) == 0 {
+		v10 *= -1
+	}
 	this.F0 = &v10
 	v11 := randStringGogoproto(r)
 	this.F1 = &v11
@@ -881,6 +899,9 @@ func NewPopulatedGoGoProtobufTestMessage4(r randyGogoproto, easy bool) *GoGoProt
 func NewPopulatedGoGoProtobufTestMessage5(r randyGogoproto, easy bool) *GoGoProtobufTestMessage5 {
 	this := &GoGoProtobufTestMessage5{}
 	v12 := r.Int31()
+	if r.Intn(2) == 0 {
+		v12 *= -1
+	}
 	this.F0 = &v12
 	v13 := randStringGogoproto(r)
 	this.F1 = &v13
@@ -931,7 +952,11 @@ func randFieldGogoproto(data []byte, r randyGogoproto, fieldNumber int, wire int
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateGogoproto(data, uint64(key))
-		data = encodeVarintPopulateGogoproto(data, uint64(r.Int63()))
+		v15 := r.Int63()
+		if r.Intn(2) == 0 {
+			v15 *= -1
+		}
+		data = encodeVarintPopulateGogoproto(data, uint64(v15))
 	case 1:
 		data = encodeVarintPopulateGogoproto(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -974,7 +999,7 @@ func (m *GoGoProtobufTestMessage1) MarshalTo(data []byte) (n int, err error) {
 	if m.F0 != nil {
 		data[i] = 0x8
 		i++
-		i = encodeVarintGogoproto(data, i, uint64(*m.F0))
+		i = encodeVarintGogoproto(data, i, uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		data[i] = 0x12
@@ -1010,7 +1035,7 @@ func (m *GoGoProtobufTestMessage2) MarshalTo(data []byte) (n int, err error) {
 	if m.F0 != nil {
 		data[i] = 0x8
 		i++
-		i = encodeVarintGogoproto(data, i, uint64(*m.F0))
+		i = encodeVarintGogoproto(data, i, uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		data[i] = 0x12
@@ -1046,7 +1071,7 @@ func (m *GoGoProtobufTestMessage3) MarshalTo(data []byte) (n int, err error) {
 	if m.F0 != nil {
 		data[i] = 0x8
 		i++
-		i = encodeVarintGogoproto(data, i, uint64(*m.F0))
+		i = encodeVarintGogoproto(data, i, uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		data[i] = 0x12
@@ -1083,7 +1108,7 @@ func (m *GoGoProtobufTestMessage4) MarshalTo(data []byte) (n int, err error) {
 	if m.F0 != nil {
 		data[i] = 0x8
 		i++
-		i = encodeVarintGogoproto(data, i, uint64(*m.F0))
+		i = encodeVarintGogoproto(data, i, uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		data[i] = 0x12
@@ -1114,7 +1139,7 @@ func (m *GoGoProtobufTestMessage5) MarshalTo(data []byte) (n int, err error) {
 	if m.F0 != nil {
 		data[i] = 0x8
 		i++
-		i = encodeVarintGogoproto(data, i, uint64(*m.F0))
+		i = encodeVarintGogoproto(data, i, uint64(uint32(*m.F0)))
 	}
 	if m.F1 != nil {
 		data[i] = 0x12

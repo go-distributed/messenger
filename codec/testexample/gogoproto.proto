@@ -1,6 +1,6 @@
 package protobuf;
 
-import "github.com/go-distributed/messenger/3rdparty/code.google.com/p/gogoprotobuf/gogoproto/gogo.proto";
+import "code.google.com/p/gogoprotobuf/gogoproto/gogo.proto";
 
 option (gogoproto.gostring_all) = true;
 option (gogoproto.equal_all) = true;
@@ -8,8 +8,8 @@ option (gogoproto.verbose_equal_all) = true;
 option (gogoproto.goproto_stringer_all) = false;
 option (gogoproto.stringer_all) =  true;
 option (gogoproto.populate_all) = true;
-option (gogoproto.testgen_all) = true;
-option (gogoproto.benchgen_all) = true;
+option (gogoproto.testgen_all) = false;
+option (gogoproto.benchgen_all) = false;
 option (gogoproto.marshaler_all) = true;
 option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;

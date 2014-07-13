@@ -1,8 +1,6 @@
 package codec
 
 import (
-	"bytes"
-	"encoding/binary"
 	"fmt"
 	"reflect"
 
@@ -89,25 +87,12 @@ func (c *GoGoProtobufCodec) Marshal(msg interface{}) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// Write the type at the beginning.
-	buf := new(bytes.Buffer)
-	if err = binary.Write(buf, binary.LittleEndian, mtype); err != nil {
-		return nil, err
-	}
-
-	// Write the data.
-	n, err := buf.Write(b)
-	if err != nil || n != len(b) {
-		return nil, err
-	}
-	return buf.Bytes(), nil
+	return append(b, byte(mtype)), nil
 }
 
 // Unmarshal a message from a byte slice.
 func (c *GoGoProtobufCodec) Unmarshal(data []byte) (interface{}, error) {
 	var err error
-	var mtype messageType
 
 	defer func() {
 		if err != nil {
@@ -115,13 +100,13 @@ func (c *GoGoProtobufCodec) Unmarshal(data []byte) (interface{}, error) {
 		}
 	}()
 
-	buf := bytes.NewBuffer(data)
-	if err = binary.Read(buf, binary.LittleEndian, &mtype); err != nil {
-		return nil, err
+	mtype := messageType(data[len(data)-1])
+	rtype, ok := c.reversedMap[mtype]
+	if !ok {
+		return nil, fmt.Errorf("Unknown message type: %v", mtype)
 	}
-
-	msg := reflect.New(c.reversedMap[mtype]).Interface().(proto.Message)
-	if err = proto.Unmarshal(buf.Bytes(), msg); err != nil {
+	msg := reflect.New(rtype).Interface().(proto.Message)
+	if err = proto.Unmarshal(data[0:len(data)-1], msg); err != nil {
 		return nil, err
 	}
 	return msg, nil

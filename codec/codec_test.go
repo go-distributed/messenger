@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"code.google.com/p/gogoprotobuf/proto"
-	"github.com/go-distributed/testify/assert"
 	example "github.com/go-distributed/messenger/codec/testexample"
+	"github.com/go-distributed/testify/assert"
 )
 
 func testMarshalUnmarshal(t *testing.T, c Codec, msg interface{}) {
@@ -135,11 +135,6 @@ func BenchmarkGoGoProtoBufCodecMarshal(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for j := range messages {
 			data[j], err = c.Marshal(messages[j])
-			assert.NoError(b, err)
-		}
-
-		for j := range data {
-			_, err := c.Unmarshal(data[j])
 			assert.NoError(b, err)
 		}
 	}
